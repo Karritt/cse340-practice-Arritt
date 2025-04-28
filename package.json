@@ -1,8 +1,7 @@
 {
   "name": "cse340-practice-Arritt",
   "dependencies": {
-    "express": "^5.1.0",
-    "pnpm": "^10.9.0"
+    "express": "^5.1.0"
   },
   "type": "module",
   "scripts": {
