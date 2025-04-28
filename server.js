@@ -10,10 +10,15 @@ import path from 'path';
     const __dirname = path.dirname(__filename);
 
     // Define the port number the server will listen on
+    const NODE_ENV = process.env.NODE_ENV || 'production';
     const PORT = process.env.PORT || 3000;
 
     // Create an instance of an Express application
     const app = express();
+
+// APPLICATION CONFIGURATION --------------------------------------------
+    app.set('view engine', 'ejs'); // Set the view engine to EJS
+    app.set('views', path.join(__dirname, 'src/views')); // Set the views directory
 
 // MIDDLEWARE -----------------------------------------------------------
     // Static files from public directory
@@ -21,15 +26,25 @@ import path from 'path';
 
 // ROUTES ---------------------------------------------------------------
     app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '/src/views/home.html'));
+        res.render('index', { 
+            title : "Home Page", 
+            content : "<h1>Welcome to the Home Page</h1><p>This is the content of the home page.</p>" 
+        });
+        //res.sendFile(path.join(__dirname, '/src/views/home.html'));
     });
     
-    app.get('/page1', (req, res) => {
-        res.sendFile(path.join(__dirname, '/src/views/page1.html'));
+    app.get('/about', (req, res) => {
+        res.render('index', { 
+            title : "Page 1", 
+            content : "<h1>Welcome to Page 1</h1><p>This is the content of page 1.</p>" 
+        });
     });
     
-    app.get('/page2', (req, res) => {
-        res.sendFile(path.join(__dirname, '/src/views/page2.html'));
+    app.get('/contact', (req, res) => {
+        res.render('index', { 
+            title : "Page 2", 
+            content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>" 
+        });
     });
 
 
