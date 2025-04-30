@@ -28,7 +28,8 @@ import path from 'path';
     app.get('/', (req, res) => {
         res.render('index', { 
             title : "Home Page", 
-            content : "<h1>Welcome to the Home Page</h1><p>This is the content of the home page.</p>" 
+            content : "<h1>Welcome to the Home Page</h1><p>This is the content of the home page.</p>",
+            NODE_ENV, PORT
         });
         //res.sendFile(path.join(__dirname, '/src/views/home.html'));
     });
@@ -36,38 +37,42 @@ import path from 'path';
     app.get('/about', (req, res) => {
         res.render('index', { 
             title : "Page 1", 
-            content : "<h1>Welcome to Page 1</h1><p>This is the content of page 1.</p>" 
+            content : "<h1>Welcome to Page 1</h1><p>This is the content of page 1.</p>",
+            NODE_ENV, PORT
         });
     });
     
     app.get('/contact', (req, res) => {
         res.render('index', { 
             title : "Page 2", 
-            content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>" 
+            content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>",
+            NODE_ENV, PORT
         });
     });
 
-
-    // Define a route handler for the root URL ('/')
-    // app.get('/', (req, res) => {
-    //     res.send('Hello, World! <a href="/about">Go to About</a>');
-    // });
-
-    
-
-    // app.get('/about', (req, res) => {
-    //     res.send('About Page <a href="/">Go back</a>');
-    // });
-
-    // app.get("/api", (req, res) => {
-    //     res.json({
-    //         message: "Hello from the API!" 
-    //     });
-    // });
-
-
-
 //Set the listener ------------------------------------------------------
+
+    // Websocket Connection
+    // When in development mode, start a WebSocket server for live reloading
+    if (NODE_ENV.includes('dev')) {
+        const ws = await import('ws');
+    
+        try {
+            const wsPort = parseInt(PORT) + 1;
+            const wsServer = new ws.WebSocketServer({ port: wsPort });
+    
+            wsServer.on('listening', () => {
+                console.log(`WebSocket server is running on port ${wsPort}`);
+            });
+    
+            wsServer.on('error', (error) => {
+                console.error('WebSocket server error:', error);
+            });
+        } catch (error) {
+            console.error('Failed to start WebSocket server:', error);
+        }
+    }
+
     // Start the server and listen on the specified port
     app.listen(PORT, () => {
         console.log(`Server is running on http://127.0.0.1:${PORT}`);

@@ -2,7 +2,8 @@
   "name": "cse340-practice-Arritt",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "ws": "^8.18.1"
   },
   "type": "module",
   "scripts": {
