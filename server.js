@@ -24,6 +24,13 @@ import path from 'path';
     // Static files from public directory
     app.use(express.static(path.join(__dirname, 'public')));
 
+    // Middleware to add current year to res.locals
+    app.use((req, res, next) => {
+        // Get the current year for copyright notice
+        res.locals.currentYear = new Date().getFullYear();
+        next();
+    });
+
 // ROUTE MIDDLEWARE ---------------------------------------------------------------
     app.get('/', (req, res) => {
         res.render('index', { 
@@ -60,6 +67,17 @@ import path from 'path';
         }
         
         next(err);
+    });
+
+    app.get('/explore/:category/:id', (req, res) => {
+        const { category, id } = req.params;
+        const { sort = 'default', filter = 'none' } = req.query;
+        console.log(`Category: ${category}, ID: ${id}, Sort: ${sort}, Filter: ${filter}`);
+
+        const title = `Exploring ${category}`;
+    
+        res.render('explore', { title, category, id, sort, filter, NODE_ENV, PORT });
+
     });
 
 // ERROR MIDDLEWARE ---------------------------------------------------------------
