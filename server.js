@@ -20,11 +20,11 @@ import path from 'path';
     app.set('view engine', 'ejs'); // Set the view engine to EJS
     app.set('views', path.join(__dirname, 'src/views')); // Set the views directory
 
-// MIDDLEWARE -----------------------------------------------------------
+// GENERIC MIDDLEWARE -----------------------------------------------------------
     // Static files from public directory
     app.use(express.static(path.join(__dirname, 'public')));
 
-// ROUTES ---------------------------------------------------------------
+// ROUTE MIDDLEWARE ---------------------------------------------------------------
     app.get('/', (req, res) => {
         res.render('index', { 
             title : "Home Page", 
@@ -33,7 +33,7 @@ import path from 'path';
         });
         //res.sendFile(path.join(__dirname, '/src/views/home.html'));
     });
-    
+
     app.get('/about', (req, res) => {
         res.render('index', { 
             title : "Page 1", 
@@ -48,6 +48,46 @@ import path from 'path';
             content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>",
             NODE_ENV, PORT
         });
+    });
+
+    app.get('/testcode/:number', (req, res, next) => {
+        const err = new Error('Test Error');
+        if (isNaN(req.params.number)) {
+            err.status = 400;
+            err.message = 'Bad Request';
+        } else {
+            err.status = parseInt(req.params.number, 10);
+        }
+        
+        next(err);
+    });
+
+// ERROR MIDDLEWARE ---------------------------------------------------------------
+    //404 Catch all
+    app.use((req, res, next) => {
+        const err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
+
+    app.use((err, req, res, next) => {
+        // Log the error for debugging
+        console.error(err.stack);
+    
+        // Set default status and determine error type
+        const status = err.status || 500;
+        const context = {
+            title: status === 404 ? 'Page Not Found' : 'Internal Server Error',
+            error: err.message,
+            stack: err.stack,
+            NODE_ENV,
+            PORT
+        };
+
+        // Render the appropriate template based on status code
+        res.status(status).render(`errors/${status === 404 ? '404' : '500'}`, context);
+
+        //res.send(`<img src="https://http.cat/${err.status}" alt="Error ${err.status}">`);
     });
 
 //Set the listener ------------------------------------------------------
