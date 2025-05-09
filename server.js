@@ -2,6 +2,23 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+// Sample product data
+const products = [
+    {
+        id: 1,
+        name: "Kindle E-Reader",
+        description: "Lightweight e-reader with a glare-free display and weeks of battery life.",
+        price: 149.99,
+        image: "https://picsum.photos/id/367/800/600"
+    },
+    {
+        id: 2,
+        name: "Vintage Film Camera",
+        description: "Capture timeless moments with this classic vintage film camera, perfect for photography enthusiasts.",
+        price: 199.99,
+        image: "https://picsum.photos/id/250/800/600"
+    }
+];
 
 
 // CONSTS ---------------------------------------------------------------
@@ -21,6 +38,33 @@ import path from 'path';
     app.set('views', path.join(__dirname, 'src/views')); // Set the views directory
 
 // GENERIC MIDDLEWARE -----------------------------------------------------------
+    
+    // Global middleware to measure request processing time
+    app.use((req, res, next) => {
+        // Record the time when the request started
+        const start = Date.now();
+    
+        /**
+         * The `res` object has built-in event listeners we can use to trigger
+         * actions at different points in the request/response lifecycle.
+         * 
+         * We will use the 'finish' event to detect when the response has been
+         * sent to the client, and then calculate the time taken to process
+         * the entire request.
+         */
+        res.on('finish', () => {
+            // Calculate how much time has passed since the request started
+            const end = Date.now();
+            const processingTime = end - start;
+    
+            // Log the results to the console
+            console.log(`${req.method} ${req.url} - Processing time: ${processingTime}ms`);
+        });
+    
+        next();
+    });
+
+
     // Static files from public directory
     app.use(express.static(path.join(__dirname, 'public')));
 
@@ -28,6 +72,47 @@ import path from 'path';
     app.use((req, res, next) => {
         // Get the current year for copyright notice
         res.locals.currentYear = new Date().getFullYear();
+        next();
+    });
+
+    //Log to the console
+    app.use((req, res, next) => {
+        console.log(`Method: ${req.method}, URL: ${req.url}`);
+        next(); // Pass control to the next middleware or route
+    });
+
+    // Global middleware to set a custom header
+    app.use((req, res, next) => {
+        res.setHeader('X-Powered-By', 'Express Middleware Tutorial');
+        next(); // Don't forget this or your request will hang!
+    });
+
+    // Middleware to validate display parameter
+    const validateDisplayMode = (req, res, next) => {
+        const { display } = req.params;
+        if (display !== 'grid' && display !== 'details') {
+            const error = new Error('Invalid display mode: must be either "grid" or "details".');
+            next(error); // Pass control to the error-handling middleware
+        }
+        next(); // Pass control to the next middleware or route
+    };
+
+    // Middleware to add a timestamp to res.locals for all views
+    app.use((req, res, next) => {
+        // Create a formatted timestamp like "May 8, 2025 at 3:42 PM"
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        };
+    
+        // Adding to res.locals makes this available to all views automatically
+        res.locals.timestamp = now.toLocaleDateString('en-US', options);
+    
         next();
     });
 
@@ -55,6 +140,18 @@ import path from 'path';
             content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>",
             NODE_ENV, PORT
         });
+    });
+
+    // Products page route with display mode validation
+    app.get('/products/:display', validateDisplayMode, (req, res) => {
+        const title = "Our Products";
+        const { display } = req.params;
+        res.render('products', { title, products, display, NODE_ENV, PORT });
+    });
+    
+    // Default products route (redirects to grid view)
+    app.get('/products', (req, res) => {
+        res.redirect('/products/grid');
     });
 
     app.get('/testcode/:number', (req, res, next) => {
