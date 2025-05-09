@@ -188,19 +188,20 @@ const products = [
     app.use((err, req, res, next) => {
         // Log the error for debugging
         console.error(err.stack);
-    
+        
         // Set default status and determine error type
         const status = err.status || 500;
         const context = {
             title: status === 404 ? 'Page Not Found' : 'Internal Server Error',
             error: err.message,
             stack: err.stack,
+            code: err.status, //for the catch-all error page to render what error code it is
             NODE_ENV,
             PORT
         };
 
         // Render the appropriate template based on status code
-        res.status(status).render(`errors/${status === 404 ? '404' : '500'}`, context);
+        res.status(status).render(`errors/${status === 404 ? '404' : 'x'}`, context); //404 for specialized 404 page, x for a catch-all error page
 
         //res.send(`<img src="https://http.cat/${err.status}" alt="Error ${err.status}">`);
     });
