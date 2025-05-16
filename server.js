@@ -119,8 +119,8 @@ const products = [
 // ROUTE MIDDLEWARE ---------------------------------------------------------------
     app.get('/', (req, res) => {
         res.render('index', { 
-            title : "Home Page", 
-            content : "<h1>Welcome to the Home Page</h1><p>This is the content of the home page.</p>",
+            title : "GreatStore", 
+            content : "<h1>Welcome to GreatStore</h1><p><a href='/about'>About GreatStore<a></p>",
             NODE_ENV, PORT
         });
         //res.sendFile(path.join(__dirname, '/src/views/home.html'));
@@ -128,16 +128,16 @@ const products = [
 
     app.get('/about', (req, res) => {
         res.render('index', { 
-            title : "Page 1", 
-            content : "<h1>Welcome to Page 1</h1><p>This is the content of page 1.</p>",
+            title : "About GreatStore", 
+            content : "<h1>About GreatStore</h1><p>It's not real.</p>",
             NODE_ENV, PORT
         });
     });
     
     app.get('/contact', (req, res) => {
         res.render('index', { 
-            title : "Page 2", 
-            content : "<h1>Welcome to Page 2</h1><p>This is the content of page 2.</p>",
+            title : "Contact GreatStore", 
+            content : "<h1>Contact Us</h1><p>You can't, we're not real.</p>",
             NODE_ENV, PORT
         });
     });
@@ -175,6 +175,15 @@ const products = [
     
         res.render('explore', { title, category, id, sort, filter, NODE_ENV, PORT });
 
+    });
+
+    app.get('/explore',(req, res) => {
+        const title = "Explore";
+        const category = "all";
+        const id = '0';
+        const { sort = 'default', filter = 'none' } = req.query;
+
+        res.render('explore', { title, category, id, sort, filter, NODE_ENV, PORT });
     });
 
 // ERROR MIDDLEWARE ---------------------------------------------------------------

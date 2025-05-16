@@ -1,4 +1,99 @@
+:root {
+    --background-main: #f0f0f0;
+    --background-secondary: #ffffff;
+    --background-tertiary: #f7f7f7;
+    --text-main: #333333;
+    --text-secondary: #555555; /* Adjusted for better contrast */
+    --text-impact: #111111; /* Softer black for better harmony */
+    --accent-1-main: #FA8072;
+    --accent-1-secondary: #e63946;
+    --accent-2-main: #007BFF; /* New blue color for accent 2 */
+    --accent-2-secondary: #0056b3; /* Darker shade of blue for accent 2 */
+}
+
 html, body {
-    background: whitesmoke;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background: var(--background-main);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    max-width: 70em;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+.products-container {
+    margin: 2rem 0;
+}
+
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Hide product descriptions in grid view */
+.grid-view .product-description {
+    display: none;
+}
+
+.details-view .product-card {
+    display: flex;
+    margin-bottom: 1.5rem;
+    /* border-bottom: 1px solid #eee; */
+    /* padding-bottom: 1.5rem; */
+}
+
+.product-card {
+    background-color: var(--background-tertiary);
+    /* border: 1px solid var(--background-tertiary); */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.details-view .product-image {
+    width: 200px;
+    height: 150px;
+    margin-right: 1.5rem;
+}
+
+.product-info {
+    padding: 1rem;
+    color: var(--text-secondary);
+}
+
+.product-name {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--accent-1-secondary);
+}
+
+.product-price {
+    font-weight: bold;
+    color: var(--text-main);
+}
+
+.view-toggle {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.view-toggle a {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    color: var(--text-main);
+}
+
+.view-toggle a.active {
+    font-weight: bold;
+    text-decoration: underline;
 }
