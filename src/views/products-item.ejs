@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+<main>
+    <!-- <h1>Exploring <%= category %></h1> -->
+    <div class="explore-details">
+
+        <h1><%= product.name %></h1>
+        <h6>PID#<%= id %></h6>
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <h3>$<%= product.price.toFixed(2) %></h3>
+        <p><%= product.description %></p>
+
+ 
+        <!-- <%# if (sort !== 'default' || filter !== 'none') { %>
+            <div class="query-params">
+                <p><strong>Applied settings:</strong></p>
+                <ul>
+                    <%# if (sort !== 'default') { %>
+                        <li>Sorting by: <%#= sort %></li>
+                    <%# } %>
+                    <%# if (filter !== 'none') { %>
+                        <li>Filtering by: <%#= filter %></li>
+                    <%# } %>
+                </ul>
+            </div>
+        <%# } %> -->
+    </div>
+</main>
+<%- include('partials/footer') %>

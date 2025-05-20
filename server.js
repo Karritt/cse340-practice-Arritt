@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
  
 // Import route handlers from their new locations
 import indexRoutes from './src/routes/index.js';
-import exploreRoutes from './src/routes/explore/index.js';
+import productsRoutes from './src/routes/products/index.js';
  
 // Import global middleware
 import { addGlobalData } from './src/middleware/index.js';
@@ -44,7 +44,14 @@ app.use(addGlobalData);
  * Routes
  */
 app.use('/', indexRoutes);
-app.use('/explore', exploreRoutes);
+
+app.use('/products', productsRoutes);
+
+app.get('/testcode/:code', (req, res, next) => {
+    const err = new Error("Test Error")
+    err.status = parseInt(req.params.code, 10);
+    next(err);
+});
 
 // ERROR MIDDLEWARE ---------------------------------------------------------------
     //404 Catch all

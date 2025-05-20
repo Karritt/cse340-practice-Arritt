@@ -8,24 +8,6 @@ const router = Router();
  * simple renders without database interaction.
  */
  
-// Sample product data
-const products = [
-    {
-        id: 1,
-        name: "Kindle E-Reader",
-        description: "Lightweight e-reader with a glare-free display and weeks of battery life.",
-        price: 149.99,
-        image: "https://picsum.photos/id/367/800/600"
-    },
-    {
-        id: 2,
-        name: "Vintage Film Camera",
-        description: "Capture timeless moments with this classic vintage film camera, perfect for photography enthusiasts.",
-        price: 199.99,
-        image: "https://picsum.photos/id/250/800/600"
-    }
-];
- 
 // Middleware to validate display parameter
 const validateDisplayMode = (req, res, next) => {
     const { display } = req.params;
@@ -50,15 +32,15 @@ router.get('/about', (req, res) => {
 });
  
 // Default products route (redirects to grid view)
-router.get('/products', (req, res) => {
-    res.redirect('/products/grid');
-});
+// router.get('/products', (req, res) => {
+//     res.redirect('/products/grid');
+// });
  
-// Products page route with display mode validation
-router.get('/products/:display', validateDisplayMode, (req, res) => {
-    const title = "Our Products";
-    const { display } = req.params;
-    res.render('products', { title, products, display });
-});
+// // Products page route with display mode validation
+// router.get('/products/:display', validateDisplayMode, (req, res) => {
+//     const title = "Our Products";
+//     const { display } = req.params;
+//     res.render('products', { title, products, display });
+// });
  
 export default router;

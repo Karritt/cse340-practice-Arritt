@@ -1,18 +1,33 @@
 import { Router } from 'express';
-import { getCategory, getItem, getRandomProduct } from '../../models/explore-data.js';
+import { getCategory, getItem, getRandomProduct } from '../../models/products-data.js';
  
 const router = Router();
  
 /**
- * The explore functionality is more complex, involving data fetching and
+ * The products functionality is more complex, involving data fetching and
  * dynamic content, so it gets its own directory. This keeps the code
  * organized and makes it easier to maintain and expand.
  */
  
-// Route for /explore - redirects to a random product
+// Route for /products - redirects to a random product
 router.get('/', async (req, res) => {
     const randomProduct = await getRandomProduct();
-    res.redirect(`/explore/${randomProduct.category}/${randomProduct.id}`);
+    res.redirect(`/products/${randomProduct.category}/${randomProduct.id}`);
+});
+
+router.get('/:category', async (req, res) => {
+    const { category } = req.params;
+    let { display } = req.query;
+    if (!display) display = "grid";
+    const ret = await getCategory(category);
+    const products = ret.items;
+    res.render('products-category', {
+        products: products,
+        title: `Exploring ${category}`,
+        display: display,
+        category: category
+    });
+    
 });
  
 // Route with multiple parameters
@@ -29,15 +44,18 @@ router.get('/:category/:id', async (req, res) => {
             title: 'Item Not Found' 
         });
     }
+
+    const product = await getItem(category, id);
  
-    res.render('explore', { 
+    res.render('products-item', { 
         title: `Exploring ${categoryData.name}`,
         category: categoryData,
         item: itemData,
         category: category,
         id: id,
         sort: sort,
-        filter: filter
+        filter: filter,
+        product: product
     });
 });
  

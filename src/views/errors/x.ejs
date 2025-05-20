@@ -3,5 +3,9 @@
     <h1>Error <%= code %></h1>
     <img src="https://http.cat/<%= code %>" alt="<%= code %> Not Found Image">
     <p>Return to the <a href="/">homepage</a> to continue browsing.</p>
+    <% if (NODE_ENV === 'development') { %>
+        <p><%= error %></p>
+        <p><%= stack %></p>
+    <% } %>
 </main>
 <%- include('../partials/footer') %>
