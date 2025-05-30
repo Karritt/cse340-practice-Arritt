@@ -7,6 +7,7 @@ import { setupDatabase, testConnection } from './src/models/setup.js';
 // Import route handlers from their new locations
 import indexRoutes from './src/routes/index.js';
 import productsRoutes from './src/routes/products/index.js';
+import dashboardRoutes from './src/routes/dashboard/index.js';
  
 // Import global middleware
 import { addGlobalData, addNavigationData } from './src/middleware/index.js';
@@ -30,6 +31,12 @@ const app = express();
  
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware to parse JSON data in request body
+app.use(express.json());
+ 
+// Middleware to parse URL-encoded form data (like from a standard HTML form)
+app.use(express.urlencoded({ extended: true }));
  
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
@@ -42,13 +49,14 @@ app.set('views', path.join(__dirname, 'src/views'));
  */
 app.use(addGlobalData);
 app.use(addNavigationData);
+
  
 /**
  * Routes
  */
 app.use('/', indexRoutes);
-
 app.use('/products', productsRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 app.get('/testcode/:code', (req, res, next) => {
     const err = new Error("Test Error")
