@@ -1,4 +1,11 @@
 import { Router } from 'express';
+import { 
+    getNavigationCategories, 
+    getCategoryBySlug, 
+    getChildCategories,
+    getProductsByCategory, 
+    getRandomNavigationCategory 
+} from '../../models/categories/index.js';
 import { getCategory, getItem, getRandomProduct } from '../../models/products-data.js';
  
 const router = Router();
@@ -10,24 +17,50 @@ const router = Router();
  */
  
 // Route for /products - redirects to a random product
-router.get('/', async (req, res) => {
-    const randomProduct = await getRandomProduct();
-    res.redirect(`/products/${randomProduct.category}/${randomProduct.id}`);
+router.get('/', async (req, res, next) => {
+    const randomCategory = await getRandomNavigationCategory();
+ 
+    if (!randomCategory) {
+        const error = new Error('No categories available');
+        error.status = 404;
+        return next(error);
+    }
+ 
+    res.redirect(`/products/${randomCategory.slug}`);
 });
 
-router.get('/:category', async (req, res) => {
+/**
+ * Route for viewing a category and its products/subcategories
+ * Updated to use database queries instead of static data
+ */
+router.get('/:category', async (req, res, next) => {
     const { category } = req.params;
-    let { display } = req.query;
-    if (!display) display = "grid";
-    const ret = await getCategory(category);
-    const products = ret.items;
+    const { display = 'grid' } = req.query;
+ 
+    // Get category from database
+    const categoryData = await getCategoryBySlug(category);
+ 
+    // Check if category exists
+    if (!categoryData) {
+        const error = new Error('Category Not Found');
+        error.status = 404;
+        return next(error);
+    }
+ 
+    // Get subcategories and products for this category
+    const subcategories = await getChildCategories(categoryData.id);
+    const products = await getProductsByCategory(categoryData.id);
+ 
+    // Render the products template
     res.render('products-category', {
-        products: products,
-        title: `Exploring ${category}`,
-        display: display,
-        category: category
+        title: `Exploring ${categoryData.name}`,
+        display,
+        categoryData,
+        subcategories,
+        products,
+        hasProducts: products.length > 0,
+        hasSubcategories: subcategories.length > 0
     });
-    
 });
  
 // Route with multiple parameters

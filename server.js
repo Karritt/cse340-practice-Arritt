@@ -1,13 +1,15 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import { setupDatabase, testConnection } from './src/models/setup.js';
  
 // Import route handlers from their new locations
 import indexRoutes from './src/routes/index.js';
 import productsRoutes from './src/routes/products/index.js';
  
 // Import global middleware
-import { addGlobalData } from './src/middleware/index.js';
+import { addGlobalData, addNavigationData } from './src/middleware/index.js';
  
 /**
  * Define important variables
@@ -39,6 +41,7 @@ app.set('views', path.join(__dirname, 'src/views'));
  * Middleware
  */
 app.use(addGlobalData);
+app.use(addNavigationData);
  
 /**
  * Routes
@@ -106,6 +109,20 @@ app.get('/testcode/:code', (req, res, next) => {
     }
 
     // Start the server and listen on the specified port
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://127.0.0.1:${PORT}`);
-    });
+    // Test database connection and setup tables
+    testConnection()
+        .then(() => setupDatabase())
+        .then(() => {
+            // Start your WebSocket server if you have one
+            // startWebSocketServer();
+    
+            // Start the Express server
+            app.listen(PORT, () => {
+                console.log(`Server running on http://127.0.0.1:${PORT}`);
+                console.log('Database connected and ready');
+            });
+        })
+        .catch((error) => {
+            console.error('Failed to start server:', error.message);
+            process.exit(1);
+        });
