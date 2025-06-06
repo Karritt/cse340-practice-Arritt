@@ -36,3 +36,19 @@ footer {
     padding:0.2em;
     text-align: center;
 }
+
+.nav-logout-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    margin: 0;
+}
+ 
+.nav-logout-btn:hover {
+    color: #0066cc;
+}
