@@ -24,8 +24,8 @@ export { addNavigationData };
 export const addGlobalData = (req, res, next) => {
     // Get the current year for copyright notice
     res.locals.currentYear = new Date().getFullYear();
-    res.locals.errors = [];
-    res.locals.messages = [];
+    // res.locals.errors = [];
+    // res.locals.messages = [];
  
     // Add NODE_ENV for all views
     res.locals.NODE_ENV = process.env.NODE_ENV || 'development';

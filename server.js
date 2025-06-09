@@ -17,7 +17,11 @@ import { addGlobalData, addNavigationData } from './src/middleware/index.js';
 import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import db from './src/models/db.js';
- 
+//flash messages
+import flashMessages from './src/middleware/flash.js';
+
+
+
 /**
  * Define important variables
  */
@@ -78,7 +82,7 @@ app.use(session({
         maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
     }
 }));
-
+app.use(flashMessages);
 
 /**
  * Routes
@@ -97,7 +101,7 @@ app.get('/testcode/:code', (req, res, next) => {
 // ERROR MIDDLEWARE ---------------------------------------------------------------
     //404 Catch all
     app.use((req, res, next) => {
-        const err = new Error('Not Found');
+        const err = new Error('Not Found: '+ req.originalUrl);
         err.status = 404;
         next(err);
     });
