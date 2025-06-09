@@ -4,9 +4,9 @@
  
     <form action="/accounts/login" method="POST" class="login-form">
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username">Email Address:</label>
             <input
-                type="text"
+                type="email"
                 id="username"
                 name="username"
                 required
@@ -30,6 +30,7 @@
  
         <div class="form-actions">
             <button type="submit">Login</button>
+            <a href="/accounts/register" class="secondary-link">Don't have an account? Register</a>
         </div>
     </form>
  

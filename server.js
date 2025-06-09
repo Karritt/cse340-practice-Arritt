@@ -53,13 +53,6 @@ app.set('view engine', 'ejs');
  
 // Set the views directory (where your templates are located)
 app.set('views', path.join(__dirname, 'src/views'));
- 
-/**
- * Middleware
- */
-app.use(addGlobalData);
-app.use(addNavigationData);
-
 
 // Session stuff
 // Configure PostgreSQL session store
@@ -82,6 +75,13 @@ app.use(session({
         maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
     }
 }));
+
+
+/**
+ * Middleware
+ */
+app.use(addGlobalData);
+app.use(addNavigationData);
 app.use(flashMessages);
 
 /**

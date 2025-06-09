@@ -11,11 +11,12 @@
     <div class="dashboard-content">
         <section class="account-info">
             <h3>Account Information</h3>
-            <p><strong>Username:</strong> <%= username %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Role:</strong> <%= user.role_name %></p>
             <p><strong>Session Status:</strong> Active</p>
             <p><strong>Login Time:</strong> <%= loginTime.toLocaleString() %></p>
         </section>
- 
+    
         <section class="dashboard-actions">
             <h3>Quick Actions</h3>
             <ul>

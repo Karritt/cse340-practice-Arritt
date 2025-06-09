@@ -41,8 +41,9 @@
                     </li>
                 <% } else { %>
                     <li><a href="/accounts/login">Login</a></li>
+                    <li><a href="/accounts/register">Register</a></li>
                 <% } %>
             </ul>
         </nav>
     </header>
-    <% include("flash.ejs") %>
+    <%- include("flash.ejs") %>
