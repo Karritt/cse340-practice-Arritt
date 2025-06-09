@@ -30,6 +30,20 @@
                     </li>
                 <% }); %>
                 <li><a href="/dashboard">Dashboard</a></li>
+
+                <!-- ACCOUNT STUFF -->
+                <% if (typeof req !== 'undefined' && req.session && req.session.isLoggedIn) { %>
+                    <li><a href="/accounts/dashboard">My Account</a></li>
+                    <li>
+                        <form action="/accounts/logout" method="POST" style="display: inline;">
+                            <button type="submit" class="nav-logout-btn">Logout</button>
+                        </form>
+                    </li>
+                <% } else { %>
+                    <li><a href="/accounts/login">Login</a></li>
+                    <li><a href="/accounts/register">Register</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>
+    <%- include("flash.ejs") %>

@@ -8,10 +8,20 @@ import { setupDatabase, testConnection } from './src/models/setup.js';
 import indexRoutes from './src/routes/index.js';
 import productsRoutes from './src/routes/products/index.js';
 import dashboardRoutes from './src/routes/dashboard/index.js';
+import accountRoutes from './src/routes/accounts/index.js';
  
 // Import global middleware
 import { addGlobalData, addNavigationData } from './src/middleware/index.js';
- 
+
+// Import session
+import session from 'express-session';
+import pgSession from 'connect-pg-simple';
+import db from './src/models/db.js';
+//flash messages
+import flashMessages from './src/middleware/flash.js';
+
+
+
 /**
  * Define important variables
  */
@@ -43,20 +53,44 @@ app.set('view engine', 'ejs');
  
 // Set the views directory (where your templates are located)
 app.set('views', path.join(__dirname, 'src/views'));
+
+// Session stuff
+// Configure PostgreSQL session store
+const PostgresStore = pgSession(session);
  
+// Configure session middleware
+app.use(session({
+    store: new PostgresStore({
+        pool: db, // Use your PostgreSQL connection
+        tableName: 'sessions', // Table name for storing sessions
+        createTableIfMissing: true // Creates table if it does not exist
+    }),
+    secret: process.env.SESSION_SECRET || "default-secret-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    name: "sessionId",
+    cookie: {
+        secure: false, // Set to true in production with HTTPS
+        httpOnly: true, // Prevents client-side access to the cookie
+        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+    }
+}));
+
+
 /**
  * Middleware
  */
 app.use(addGlobalData);
 app.use(addNavigationData);
+app.use(flashMessages);
 
- 
 /**
  * Routes
  */
 app.use('/', indexRoutes);
 app.use('/products', productsRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/accounts', accountRoutes);
 
 app.get('/testcode/:code', (req, res, next) => {
     const err = new Error("Test Error")
@@ -67,7 +101,7 @@ app.get('/testcode/:code', (req, res, next) => {
 // ERROR MIDDLEWARE ---------------------------------------------------------------
     //404 Catch all
     app.use((req, res, next) => {
-        const err = new Error('Not Found');
+        const err = new Error('Not Found: '+ req.originalUrl);
         err.status = 404;
         next(err);
     });

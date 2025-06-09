@@ -2,6 +2,17 @@ import express from 'express';
 import { getAllProducts, addProduct } from '../../models/products/index.js';
  
 const router = express.Router();
+
+router.use((req, res, next) => {
+    // Add this check at the beginning of each dashboard route
+    if (!req.session.isLoggedIn) {
+        req.flash( error, 'Please log in to access the dashboard');
+        return res.render('accounts/login', {
+            title: 'Login'
+        });
+    }
+    next();
+});
  
 /**
  * Dashboard home page - displays navigation to product management features
