@@ -32,7 +32,13 @@
                 <li><a href="/dashboard">Dashboard</a></li>
 
                 <!-- ACCOUNT STUFF -->
-                <% if (typeof req !== 'undefined' && req.session && req.session.isLoggedIn) { %>
+                <% if (
+                    typeof req !== 'undefined' 
+                        && 
+                    req.session 
+                        && 
+                    req.session.isLoggedIn
+                ) { %>
                     <li><a href="/accounts/dashboard">My Account</a></li>
                     <li>
                         <form action="/accounts/logout" method="POST" style="display: inline;">

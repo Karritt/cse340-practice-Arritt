@@ -8,13 +8,12 @@ async function addNavigationData(req, res, next) {
     try {
         const navigationCategories = await getNavigationCategories();
         res.locals.navigationCategories = navigationCategories;
-        next();
     } catch (error) {
         console.error('Error loading navigation data:', error.message);
         // Continue without navigation data rather than failing the request
         res.locals.navigationCategories = [];
-        next();
     }
+    next();
 }
  
 export { addNavigationData };
