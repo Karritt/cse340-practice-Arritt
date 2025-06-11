@@ -25,6 +25,7 @@ export const addGlobalData = (req, res, next) => {
     res.locals.currentYear = new Date().getFullYear();
     // res.locals.errors = [];
     // res.locals.messages = [];
+    res.locals.req = req;
  
     // Add NODE_ENV for all views
     res.locals.NODE_ENV = process.env.NODE_ENV || 'development';

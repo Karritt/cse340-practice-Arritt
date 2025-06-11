@@ -14,7 +14,12 @@ header {
             list-style: none;
             li {
                 margin: 0 1rem;
-                a {
+                a, .nav-logout-btn {
+                    border:none;
+                    font-family: inherit;
+                    font-size: inherit;
+                    background-color: transparent;
+                    cursor: pointer;
                     text-decoration: none;
                     color: var(--text-primary);
                     padding: 0.5rem 1rem;
@@ -37,7 +42,7 @@ footer {
     text-align: center;
 }
 
-.nav-logout-btn {
+/* .nav-logout-btn {
     background: none;
     border: none;
     color: inherit;
@@ -51,7 +56,7 @@ footer {
  
 .nav-logout-btn:hover {
     color: #0066cc;
-}
+} */
 
 .flash-messages {
     margin: 1rem 0;
