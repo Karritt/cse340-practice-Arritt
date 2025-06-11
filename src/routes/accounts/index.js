@@ -33,6 +33,7 @@ router.post('/login', async (req, res) => {
  
         // Authenticate user
         const user = await authenticateUser(email, password);
+        console.log('User authentication result:', user);
  
         if (!user) {
             req.flash('error', 'Invalid email or password');

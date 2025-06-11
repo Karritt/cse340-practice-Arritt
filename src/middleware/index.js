@@ -8,13 +8,12 @@ async function addNavigationData(req, res, next) {
     try {
         const navigationCategories = await getNavigationCategories();
         res.locals.navigationCategories = navigationCategories;
-        next();
     } catch (error) {
         console.error('Error loading navigation data:', error.message);
         // Continue without navigation data rather than failing the request
         res.locals.navigationCategories = [];
-        next();
     }
+    next();
 }
  
 export { addNavigationData };
@@ -26,6 +25,7 @@ export const addGlobalData = (req, res, next) => {
     res.locals.currentYear = new Date().getFullYear();
     // res.locals.errors = [];
     // res.locals.messages = [];
+    res.locals.req = req;
  
     // Add NODE_ENV for all views
     res.locals.NODE_ENV = process.env.NODE_ENV || 'development';

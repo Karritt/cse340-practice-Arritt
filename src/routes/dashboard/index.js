@@ -6,7 +6,7 @@ const router = express.Router();
 router.use((req, res, next) => {
     // Add this check at the beginning of each dashboard route
     if (!req.session.isLoggedIn) {
-        req.flash( error, 'Please log in to access the dashboard');
+        req.flash( 'error', 'Please log in to access the dashboard');
         return res.render('accounts/login', {
             title: 'Login'
         });
